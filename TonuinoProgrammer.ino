@@ -9,10 +9,13 @@ String Version = "Version 2.0";
 #include <MFRC522.h>
 
 // Pin Defintion for ESP32 Development Kit
-// Edit Corresponding to your Board
 #define RST_PIN 2
 #define SS_PIN 21
 
+// Pin Defintion Nano
+//#define RST_PIN         9
+//#define SS_PIN          10
+//#define LED             A5
 
 /*
 DEBUG Mode enables more detailed console output for debugging
@@ -29,7 +32,7 @@ https://github.com/donschoof/tonuino-toolbox
 */
 enum Mode { MANUAL,
             TOOLBOX };
-Mode mode = TOOLBOX;
+Mode mode = MANUAL;
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 MFRC522::MIFARE_Key key;
@@ -39,6 +42,7 @@ String inputString = "";
 String assign_folder = "";
 String assign_mode = "";
 String assign_file = "";
+String assign_file2 = "";
 String special = "";
 byte special_2 = 0xEA;
 
@@ -194,7 +198,77 @@ void loop() {
     assign_folder = inputString.substring(6, 8);
     assign_mode = inputString.substring(9, 10);
     assign_file = inputString.substring(11, 14);
-    if (assign_folder.toInt() != 0 && assign_mode.toInt() > 0 && assign_mode.toInt() < 4 || assign_mode.toInt() == 5) {
+    assign_file2 = inputString.substring(15, 18);
+    if (assign_folder.toInt() != 0 && assign_mode.toInt() > 0 && assign_mode.toInt() < 9 && assign_mode.toInt() != 6 || assign_mode.toInt() == 9) {
+      // Party von bis
+      if (assign_file.toInt() > 255 || assign_file.toInt() == 0 || assign_file2.toInt() > 255 || assign_file2.toInt() == 0) {
+        Serial.println(F("Du kannst nur eine Datei zwischen 1-255 eingeben"));
+        Serial.println();
+        inputString = "";
+      } else if (assign_folder.toInt() == 0 || assign_folder.toInt() > 99) {
+        Serial.println(F("Du kannst nur einen Ordner zwischen 1-99 eingeben"));
+        Serial.println();
+        inputString = "";
+      } else {
+        for (int i = 0; i < 4; i++) {
+          dataBlock[i] = magicCookie[i];
+        }
+        dataBlock[4] = Card_Version;
+        dataBlock[5] = assign_folder.toInt();
+        dataBlock[6] = assign_mode.toInt();
+        dataBlock[7] = assign_file.toInt();
+        dataBlock[8] = assign_file2.toInt();
+        write_RFID();
+        delay(250);
+        inputString = "";
+      }
+    } else if (assign_mode.toInt() == 8) {
+      // Album von bis
+      if (assign_file.toInt() > 255 || assign_file.toInt() == 0 || assign_file2.toInt() > 255 || assign_file2.toInt() == 0) {
+        Serial.println(F("Du kannst nur eine Datei zwischen 1-255 eingeben"));
+        Serial.println();
+        inputString = "";
+      } else if (assign_folder.toInt() == 0 || assign_folder.toInt() > 99) {
+        Serial.println(F("Du kannst nur einen Ordner zwischen 1-99 eingeben"));
+        Serial.println();
+        inputString = "";
+      } else {
+        for (int i = 0; i < 4; i++) {
+          dataBlock[i] = magicCookie[i];
+        }
+        dataBlock[4] = Card_Version;
+        dataBlock[5] = assign_folder.toInt();
+        dataBlock[6] = assign_mode.toInt();
+        dataBlock[7] = assign_file.toInt();
+        dataBlock[8] = assign_file2.toInt();
+        write_RFID();
+        delay(250);
+        inputString = "";
+      }
+    } else if (assign_mode.toInt() == 7) {
+      // Hörspiel von bis
+      if (assign_file.toInt() > 255 || assign_file.toInt() == 0 || assign_file2.toInt() > 255 || assign_file2.toInt() == 0) {
+        Serial.println(F("Du kannst nur eine Datei zwischen 1-255 eingeben"));
+        Serial.println();
+        inputString = "";
+      } else if (assign_folder.toInt() == 0 || assign_folder.toInt() > 99) {
+        Serial.println(F("Du kannst nur einen Ordner zwischen 1-99 eingeben"));
+        Serial.println();
+        inputString = "";
+      } else {
+        for (int i = 0; i < 4; i++) {
+          dataBlock[i] = magicCookie[i];
+        }
+        dataBlock[4] = Card_Version;
+        dataBlock[5] = assign_folder.toInt();
+        dataBlock[6] = assign_mode.toInt();
+        dataBlock[7] = assign_file.toInt();
+        dataBlock[8] = assign_file2.toInt();
+        write_RFID();
+        delay(250);
+        inputString = "";
+      }
+    } else if (assign_mode.toInt() == 5) {
       for (int i = 0; i < 4; i++) {
         dataBlock[i] = magicCookie[i];
       }
@@ -228,7 +302,7 @@ void loop() {
         delay(250);
         inputString = "";
       }
-    } else if (assign_mode.toInt() > 5) {
+    } else if (assign_mode.toInt() > 9) {
       Serial.println(F("Diese Funktion gibt es noch nicht!"));
       Serial.println();
       inputString = "";
@@ -493,7 +567,39 @@ void assigned_mode(byte buffer[]) {
     Serial.println(F(" spielen und Fortschritt merken"));
     Serial.println();
   }
-
+  // Hörspiel von bis = 7
+  if (buffer[5] != 0x00 && buffer[6] == 0x07) {
+    Serial.print(F("Hörspiel Modus 7 -> die Dateien "));
+    Serial.print(buffer[7], DEC);
+    Serial.print(F(" bis "));
+    Serial.print(buffer[8], DEC);
+    Serial.print(F(" aus dem Ordner "));
+    Serial.print(buffer[5], DEC);
+    Serial.println(F(" abspielen"));
+    Serial.println();
+  }
+  // Album von bis = 8
+  if (buffer[5] != 0x00 && buffer[6] == 0x08) {
+    Serial.print(F("Album Modus 8 -> die Dateien "));
+    Serial.print(buffer[7], DEC);
+    Serial.print(F(" bis "));
+    Serial.print(buffer[8], DEC);
+    Serial.print(F(" aus dem Ordner "));
+    Serial.print(buffer[5], DEC);
+    Serial.println(F(" abspielen"));
+    Serial.println();
+  }
+  // Party von bis = 9
+  if (buffer[5] != 0x00 && buffer[6] == 0x09) {
+    Serial.print(F("Party Modus 9 -> die Dateien "));
+    Serial.print(buffer[7], DEC);
+    Serial.print(F(" bis "));
+    Serial.print(buffer[8], DEC);
+    Serial.print(F(" aus dem Ordner "));
+    Serial.print(buffer[5], DEC);
+    Serial.println(F(" abspielen"));
+    Serial.println();
+  }
   // Modifikationskarten:
   // Admin Karte
   if (buffer[6] == 0xFF && buffer[7] == 0x09 && buffer[8] == 0xEA) {
@@ -525,6 +631,11 @@ void assigned_mode(byte buffer[]) {
   // KiTa Karte
   if (buffer[5] == 0x00 && buffer[6] == 0x05) {
     Serial.println(F("KiTa Karte"));
+    Serial.println();
+  }
+  // Wiederholen
+  if (buffer[5] == 0x00 && buffer[6] == 0x06) {
+    Serial.println(F("Widerholen"));
     Serial.println();
   }
 }
