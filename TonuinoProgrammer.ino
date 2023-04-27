@@ -9,13 +9,13 @@ String Version = "Version 2.0";
 #include <MFRC522.h>
 
 // Pin Defintion for ESP32 Development Kit
-#define RST_PIN 2
-#define SS_PIN 21
+//#define RST_PIN 2
+//#define SS_PIN 21
 
 // Pin Defintion Nano
-//#define RST_PIN         9
-//#define SS_PIN          10
-//#define LED             A5
+#define RST_PIN         9
+#define SS_PIN          10
+#define LED             A5
 
 /*
 DEBUG Mode enables more detailed console output for debugging
