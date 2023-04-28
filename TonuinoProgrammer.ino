@@ -197,81 +197,6 @@ void loop() {
     inputString = "";
   }
 
-  if (inputString.substring(0, 6) == "write ") {
-    assign_folder = inputString.substring(6, 8);
-    assign_mode = inputString.substring(9, 10);
-    assign_file = inputString.substring(11, 14);
-    assign_file2 = inputString.substring(15, 18);
-    if (assign_folder.toInt() != 0 && assign_mode.toInt() > 0 && assign_mode.toInt() < 9 && assign_mode.toInt() != 6 || assign_mode.toInt() == 9) {
-      // Party von bis
-      if (assign_file.toInt() > 255 || assign_file.toInt() == 0 || assign_file2.toInt() > 255 || assign_file2.toInt() == 0) {
-        Serial.println(F("Du kannst nur eine Datei zwischen 1-255 eingeben"));
-        Serial.println();
-        inputString = "";
-      } else if (assign_folder.toInt() == 0 || assign_folder.toInt() > 99) {
-        Serial.println(F("Du kannst nur einen Ordner zwischen 1-99 eingeben"));
-        Serial.println();
-        inputString = "";
-      } else {
-        for (int i = 0; i < 4; i++) {
-          dataBlock[i] = magicCookie[i];
-        }
-        dataBlock[4] = Card_Version;
-        dataBlock[5] = assign_folder.toInt();
-        dataBlock[6] = assign_mode.toInt();
-        dataBlock[7] = assign_file.toInt();
-        dataBlock[8] = assign_file2.toInt();
-        write_RFID();
-        delay(250);
-        inputString = "";
-      }
-    } else if (assign_mode.toInt() == 8) {
-      // Album von bis
-      if (assign_file.toInt() > 255 || assign_file.toInt() == 0 || assign_file2.toInt() > 255 || assign_file2.toInt() == 0) {
-        Serial.println(F("Du kannst nur eine Datei zwischen 1-255 eingeben"));
-        Serial.println();
-        inputString = "";
-      } else if (assign_folder.toInt() == 0 || assign_folder.toInt() > 99) {
-        Serial.println(F("Du kannst nur einen Ordner zwischen 1-99 eingeben"));
-        Serial.println();
-        inputString = "";
-      } else {
-        for (int i = 0; i < 4; i++) {
-          dataBlock[i] = magicCookie[i];
-        }
-        dataBlock[4] = Card_Version;
-        dataBlock[5] = assign_folder.toInt();
-        dataBlock[6] = assign_mode.toInt();
-        dataBlock[7] = assign_file.toInt();
-        dataBlock[8] = assign_file2.toInt();
-        write_RFID();
-        delay(250);
-        inputString = "";
-      }
-    } else if (assign_mode.toInt() == 7) {
-      // Hörspiel von bis
-      if (assign_file.toInt() > 255 || assign_file.toInt() == 0 || assign_file2.toInt() > 255 || assign_file2.toInt() == 0) {
-        Serial.println(F("Du kannst nur eine Datei zwischen 1-255 eingeben"));
-        Serial.println();
-        inputString = "";
-      } else if (assign_folder.toInt() == 0 || assign_folder.toInt() > 99) {
-        Serial.println(F("Du kannst nur einen Ordner zwischen 1-99 eingeben"));
-        Serial.println();
-        inputString = "";
-      } else {
-        for (int i = 0; i < 4; i++) {
-          dataBlock[i] = magicCookie[i];
-        }
-        dataBlock[4] = Card_Version;
-        dataBlock[5] = assign_folder.toInt();
-        dataBlock[6] = assign_mode.toInt();
-        dataBlock[7] = assign_file.toInt();
-        dataBlock[8] = assign_file2.toInt();
-        write_RFID();
-        delay(250);
-        inputString = "";
-      }
-    } else if (assign_mode.toInt() == 5) {
       for (int i = 0; i < 4; i++) {
         dataBlock[i] = magicCookie[i];
       }
@@ -283,37 +208,6 @@ void loop() {
       write_RFID();
       delay(250);
       inputString = "";
-    } else if (assign_mode.toInt() == 4) {
-      if (assign_file.toInt() > 255 || assign_file.toInt() == 0) {
-        Serial.println(F("Du kannst nur eine Datei zwischen 1-255 eingeben"));
-        Serial.println();
-        inputString = "";
-      } else if (assign_folder.toInt() == 0 || assign_folder.toInt() > 99) {
-        Serial.println(F("Du kannst nur einen Ordner zwischen 1-99 eingeben"));
-        Serial.println();
-        inputString = "";
-      } else {
-        for (int i = 0; i < 4; i++) {
-          dataBlock[i] = magicCookie[i];
-        }
-        dataBlock[4] = Card_Version;
-        dataBlock[5] = assign_folder.toInt();
-        dataBlock[6] = assign_mode.toInt();
-        dataBlock[7] = assign_file.toInt();
-        dataBlock[8] = 0x00;
-        write_RFID();
-        delay(250);
-        inputString = "";
-      }
-    } else if (assign_mode.toInt() > 9) {
-      Serial.println(F("Diese Funktion gibt es noch nicht!"));
-      Serial.println();
-      inputString = "";
-    }
-  }
-  mfrc522.PICC_HaltA();
-  mfrc522.PCD_StopCrypto1();
-}
 
 void read_RFID() {
 
