@@ -67,7 +67,7 @@ void setup() {
   }
   pinMode(A5, OUTPUT);
   digitalWrite(A5, HIGH);
-    if(mode == NORMAL){
+    if(mode == TOOLBOX){
     inputString = "info";
   }
 }
