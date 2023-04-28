@@ -2,7 +2,7 @@
 Arduino Based NFC Programmer for the Tonuino Project
 
 ## New Features
-* Updated Code to Support Mifare Ultralight (PICC_TYPE_MIFARE_UL) as the [TonUINO](https://github.com/xfjx/TonUINO/) supports it
+* Updated Code to Support Mifare Ultralight (PICC_TYPE_MIFARE_UL) as the [TonUINO](https://github.com/tonuino/TonUINO-TNG) supports it
 * DEBUG Mode can be toggled by sending the `degug` command
 * New UI Mode. You can select between `NORMAL` - full UI on Console like orignal Sourcecode and `TOOLBOX`, which has a minimal UI to be used programmatically
 * Support for the newer TonUINO Modes 7-9 (from .. to Modes)
