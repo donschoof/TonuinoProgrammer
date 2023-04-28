@@ -67,6 +67,9 @@ void setup() {
   }
   pinMode(A5, OUTPUT);
   digitalWrite(A5, HIGH);
+    if(mode == NORMAL){
+    inputString = "info";
+  }
 }
 
 void loop() {
