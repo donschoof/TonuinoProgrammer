@@ -32,7 +32,7 @@ https://github.com/donschoof/tonuino-toolbox
 */
 enum Mode { MANUAL,
             TOOLBOX };
-Mode mode = TOOLBOX;
+Mode mode = MANUAL;
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 MFRC522::MIFARE_Key key;
